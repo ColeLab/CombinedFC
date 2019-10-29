@@ -1,2 +1,2 @@
 # CombinedFC
-repository for the combinedFC project (Sanchez-Romero &amp; Cole, 2019)
+Repository for the combinedFC project (Sanchez-Romero &amp; Cole, 2019)
