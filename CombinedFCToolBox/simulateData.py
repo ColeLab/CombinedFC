@@ -36,7 +36,7 @@ def pseudoEmpiricalData(C, mean_coeff = 0.8, std_coeff = 1, nDatapoints=1200):
     np.fill_diagonal(W,0)
     
     #randomize empirical data and subjects to create E values for the model X = WX + E
-    datadir = 'CombinedFCToolBox/hcp_data'
+    datadir = 'hcp_data'
     #150 subjects used to guarantee variability in the simulations
     subjects = [
         '100206','108020','117930','126325','133928','143224','153934','164636','174437',
