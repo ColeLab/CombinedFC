@@ -9,8 +9,8 @@ def repetitionsParallel(model,
                         nNodes,
                         nDatapoints,
                         parameters,
-                        mean_coeff,
-                        std_coeff,
+                        min_coeff,
+                        max_coeff,
                         dataType,
                         methodCondAsso,
                         methodParcorr,
@@ -33,10 +33,10 @@ def repetitionsParallel(model,
 
         #Simulate data using network model C
         if dataType == 'pseudoEmpirical':
-            X = cfc.simulateData.pseudoEmpiricalData(C, mean_coeff=mean_coeff, std_coeff=std_coeff,
+            X, W = cfc.simulateData.pseudoEmpiricalData(C, min_coeff=min_coeff, max_coeff=max_coeff,
                                                      nDatapoints=nDatapoints[sample])
         if dataType == 'synthetic':
-            X = cfc.simulateData.syntheticData(C, mean_coeff=mean_coeff, std_coeff=std_coeff,
+            X, W = cfc.simulateData.syntheticData(C, mean_coeff=mean_coeff, std_coeff=std_coeff,
                                                      nDatapoints=nDatapoints[sample],
                                                       distribution='Gaussian')
 

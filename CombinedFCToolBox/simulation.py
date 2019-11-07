@@ -10,8 +10,8 @@ def simulation(repetitions=10,
                nNodes = [50,200,400], 
                nDatapoints = [1200],
                edgeDensity='fixed',
-               mean_coeff = 0.8, 
-               std_coeff = 1,
+               min_coeff = -1, 
+               max_coeff = 1,
                dataType='pseudoEmpirical',
                methodCondAsso = 'partialCorrelation',
                methodParcorr='inverseCovariance',
@@ -27,8 +27,8 @@ def simulation(repetitions=10,
         nDatapoints : number of datapoints for the true model, enter as array [1200] or [250,400,1200]
         edgeDensity : if 'fixed' choose the middle value of the 3 edge density parameters of the sensitivity test, 
                       if 'profile' run the 3 edge density parameters
-        mean_coeff : mean for the normal distribution from where W coefficients will be sampled.
-        std_coeff :  standard deviation for the normal distribution from where W coefficients will be sampled.
+        min_coeff = lower limit for the sampling uniform distribution for the coefficients
+        max_coeff = upper limit for the sampling uniform distribution for the coefficients
         dataType : 'pseudoEmpirical' or 'synthetic': see simulateData.py function for definitions.
         methodCondAsso : a string 'partialCorrelation' or 'multipleRegression' for the conditional association
         methodParcorr : a string 'inverseCovariance' or 'regression', method to compute partial correlation if chosen 
@@ -83,7 +83,8 @@ def simulation(repetitions=10,
                                                  args=(model,
                                                        nNodes,nDatapoints,
                                                        parameters,
-                                                       mean_coeff,std_coeff,
+                                                       min_coeff,
+                                                       max_coeff,
                                                        dataType,
                                                        methodCondAsso,
                                                        methodParcorr,

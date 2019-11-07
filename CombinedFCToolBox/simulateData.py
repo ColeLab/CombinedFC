@@ -8,29 +8,35 @@ from scipy import stats, linalg
 import h5py
 
 
-def pseudoEmpiricalData(C, mean_coeff = 0.8, std_coeff = 1, nDatapoints=1200):
+def pseudoEmpiricalData(C, min_coeff = -1, max_coeff = 1, nDatapoints=1200):
     ''' 
     INPUT
         C : directed binary connectivity matrix. If entry Cij = 1 then Wij will be assigned a coefficient value.
-        mean_coeff : mean for the normal distribution from where W coefficients will be sampled.
-        std_coeff :  standard deviation for the normal distribution from where W coefficients will be sampled.
+        min_coeff = lower limit for the sampling uniform distribution for the coefficients
+        max_coeff = upper limit for the sampling uniform distribution for the coefficients
         nDatapoints : number of datapoints for dataset X. Default 1200 as one session of the HCP resting-state data
     OUTPUT
-        X : pseudoEmpirical dataset with shape [nDatapoints x nNodes].
+        X : pseudoEmpirical dataset with shape [nDatapoints x nNodes]
+        W : matrix of directed connectivity weights [nNodes x nNodes]
     '''
 
     #number of directed egdes in the network C
     nEdges = np.sum(C==1)
-    W = C.copy()
+    #number of nodes in the network C
+    nNodes = C.shape[0]
+    #allocate memory
+    W = np.zeros((nNodes,nNodes))
     #coefficients sampled from a normal distribution with mean = mean_coeff and std = std_coeff
-    coeff = np.random.normal(loc=mean_coeff, scale=std_coeff, size=(1,nEdges))
-    #threshold to avoid edges with coefficient zero
-    thresh = 0.5
+    #coeff = np.random.normal(loc=mean_coeff, scale=std_coeff, size=(1,nEdges))
+    #coefficients sampled from a uniform distribution between min_coeff and max_coeff
+    coeff = np.random.uniform(min_coeff,max_coeff,size=(1,nEdges))
+    #threshold to avoid edges with small coefficients close to zero
+    thresh = 0.1
     coeff[(coeff < thresh) & (coeff >= 0)] = thresh
     coeff[(coeff > -thresh) & (coeff < 0)] = -thresh
     
-    #create the coefficient matrix W
-    W[W.nonzero()] = coeff
+    #create the coefficient matrix W assigning coeff to entries C!=0
+    W[C.nonzero()] = coeff
     #zeroed the diagonal of W to guarantee that in the inversion, the coefficients for the self error E_ii = 1
     nNodes = W.shape[0]
     np.fill_diagonal(W,0)
@@ -91,38 +97,46 @@ def pseudoEmpiricalData(C, mean_coeff = 0.8, std_coeff = 1, nDatapoints=1200):
     #so can be expressed as X = inv(I-W)*E to generate X dataset, where I is the identity matrix
     I = np.identity(nNodes)  
     X = np.dot(linalg.pinv(I-W),E)
-    #transpose to get pseudo empirical dataset X ordered as [nNodes x nDatapoints]
+    #standardize the data to mean 0 and std.dev 1
+    X = stats.zscore(X,axis=1)
+    #transpose to get pseudo empirical dataset X ordered as [nDatapoints x nNodes]
     X = X.T 
     
-    return X
+    return X, W
 
 
 
-def syntheticData(C, mean_coeff = 0.8, std_coeff = 1, nDatapoints=1200, distribution='Gaussian'):
+def syntheticData(C, min_coeff = -1, max_coeff = 1, nDatapoints=1200, distribution='Gaussian'):
     ''' 
     INPUT
         C : directed binary connectivity matrix. If entry Cij = 1 then Wij will be assigned a coefficient value.
-        mean_coeff : mean for the normal distribution from where W coefficients will be sampled.
-        std_coeff :  standard deviation for the normal distribution from where W coefficients will be sampled.
+        min_coeff = lower limit for the sampling uniform distribution for the coefficients
+        max_coeff = upper limit for the sampling uniform distribution for the coefficients
         nDatapoints : number of datapoints for dataset X. Default 1200 as one session of the HCP resting-state data
         distribution : a string 'Gaussian' for a normal with mean = 0 and std.dev = 1, or 'nonGaussian',
                        for a beta with parameters a = 1, b = 5 
     OUTPUT
-        X : pseudoEmpirical dataset with shape [nDatapoints x nNodes].
+        X : pseudoEmpirical dataset with shape [nDatapoints x nNodes]
+        W : matrix of directed connectivity weights [nNodes x nNodes]
     '''
 
     #number of directed egdes in the network C
     nEdges = np.sum(C==1)
-    W = C.copy()
+    #number of nodes in the network C
+    nNodes = C.shape[0]
+    #allocate memory
+    W = np.zeros((nNodes,nNodes))
     #coefficients sampled from a normal distribution with mean = mean_coeff and std = std_coeff
-    coeff = np.random.normal(loc=mean_coeff, scale=std_coeff, size=(1,nEdges))
-    #threshold to avoid edges with coefficient zero
-    thresh = 0.5
+    #coeff = np.random.normal(loc=mean_coeff, scale=std_coeff, size=(1,nEdges))
+    #coefficients sampled from a uniform distribution between min_coeff and max_coeff
+    coeff = np.random.uniform(min_coeff,max_coeff,size=(1,nEdges))
+    #threshold to avoid edges with small coefficients close to zero
+    thresh = 0.1
     coeff[(coeff < thresh) & (coeff >= 0)] = thresh
     coeff[(coeff > -thresh) & (coeff < 0)] = -thresh
     
-    #create the coefficient matrix W
-    W[W.nonzero()] = coeff
+    #create the coefficient matrix W assigning coeff to entries C!=0
+    W[C.nonzero()] = coeff
     #zeroed the diagonal of W to guarantee that in the inversion, the coefficients for the self error E_ii = 1
     nNodes = W.shape[0]
     np.fill_diagonal(W,0)
@@ -138,10 +152,10 @@ def syntheticData(C, mean_coeff = 0.8, std_coeff = 1, nDatapoints=1200, distribu
     #so can be expressed as X = inv(I-W)*E to generate X dataset, where I is the identity matrix
     I = np.identity(nNodes)  
     X = np.dot(linalg.pinv(I-W),E)
-    #transpose to get pseudo empirical dataset X ordered as [nNodes x nDatapoints]
+    #transpose to get pseudo empirical dataset X ordered as [nDatapoints x nNodes]
     X = X.T 
     
-    return X
+    return X,W
  
  
 
