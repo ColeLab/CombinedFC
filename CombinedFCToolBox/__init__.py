@@ -5,7 +5,6 @@ from .graphModel import *
 from .groupCorrSig import *
 from .groupCombinedFC import *
 from .groupParcorrSig import *
-from .MidpointNormalize import *
 from .multipleRegressionSig import *
 from .parCorrInvCov import *
 from .parCorrGlasso import *
