@@ -3,7 +3,7 @@
 
 import multiprocessing as mp
 import numpy as np
-import CombinedFCToolBox as cfc
+from .repetitionsParallel import *
 
 def simulation(repetitions=10,
                model='ErdosRenyi',
@@ -79,7 +79,7 @@ def simulation(repetitions=10,
                         #useful info: www.machinelearningplus.com/python/parallel-processing-python/
                         pool = mp.Pool(mp.cpu_count())
                         #run repetitions in parallel
-                        resultsRep = [pool.apply(cfc.repetitionsParallel,
+                        resultsRep = [pool.apply(repetitionsParallel,
                                                  args=(model,
                                                        nNodes,nDatapoints,
                                                        parameters,

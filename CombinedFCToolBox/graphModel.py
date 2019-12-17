@@ -1,5 +1,6 @@
 #first install the next module, typing from terminal:
 # "conda install -c conda-forge python-igraph"
+# or "pip install python-igraph"
 #documentation at, https://igraph.org/python/
 
 import igraph as ig

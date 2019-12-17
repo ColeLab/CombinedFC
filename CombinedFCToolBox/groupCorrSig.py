@@ -2,8 +2,8 @@
 #to determine if the group mean correlations are significantly different from zero
 
 import numpy as np
-import CombinedFCToolBox as cfc
 from scipy import stats
+from .fisherZTrans import *
 
 def groupCorrSig(groupData, alpha = 0.01):
     '''
@@ -32,7 +32,7 @@ def groupCorrSig(groupData, alpha = 0.01):
         np.fill_diagonal(gCorr[:,:,subj],0)
         #Transform the correlation matrix for each subject with Fisher z-transform  
         # z = (atanh(r)-atanh(r_Ho))*sqrt(N-Z-3) ~ N(0,1)
-        Fz_gCorr[:,:,subj] = cfc.fisherZTrans(gCorr[:,:,subj], 
+        Fz_gCorr[:,:,subj] = fisherZTrans(gCorr[:,:,subj], 
                                           nDatapoints = groupData[subj].shape[0], 
                                           Ho=0, 
                                           condSetSize=0)

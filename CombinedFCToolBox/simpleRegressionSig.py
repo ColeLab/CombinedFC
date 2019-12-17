@@ -13,7 +13,7 @@ def simpleRegressionSig(y, x, alpha = 0.01, sigTest = True):
         alpha : cutoff for the significance decision. Default is 0.01
         sigTest : if True, perform the t-test of significance for the Beta coefficients
     OUTPUT:
-        b : the b regression coefficient. If sigTest = True, return b if significant, otherwise return 0
+        b : the b regression coefficient. If sigTest = True, return b if significant, return 0 for non-significant
             
     '''
     

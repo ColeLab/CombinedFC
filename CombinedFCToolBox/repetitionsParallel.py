@@ -4,6 +4,7 @@
 
 import numpy as np
 import CombinedFCToolBox as cfc
+from .graphModel import *
 
 def repetitionsParallel(model,
                         nNodes,
@@ -29,7 +30,7 @@ def repetitionsParallel(model,
         if model == 'StaticPowerLaw' or model == 'ErdosRenyi':
             totalPosEdges = nNodes[node] * (nNodes[node]-1)/2 #total number of possible edges
             edgeDensity = round(totalPosEdges*parameters[param])
-            C = cfc.graphModel(model=model,edgeDensity=edgeDensity, nNodes=nNodes[node]) 
+            C = graphModel(model=model,edgeDensity=edgeDensity, nNodes=nNodes[node]) 
 
         #Simulate data using network model C
         if dataType == 'pseudoEmpirical':
@@ -40,7 +41,7 @@ def repetitionsParallel(model,
                                                      nDatapoints=nDatapoints[sample],
                                                       distribution='Gaussian')
 
-        #compute combinedFC and the chosen methods by themselves
+        #compute combinedFC with the chosen methods
         Mcfc = cfc.combinedFC(dataset=X, 
                               methodCondAsso=methodCondAsso,
                               methodParcorr=methodParcorr,

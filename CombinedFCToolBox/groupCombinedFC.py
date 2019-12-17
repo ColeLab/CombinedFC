@@ -1,8 +1,9 @@
 #Group combinedFC analysis
 
 import numpy as np
-import CombinedFCToolBox as cfc
 from scipy import stats
+from .groupParcorrSig import *
+from .fisherZTrans import *
 
 def groupCombinedFC(groupData, 
                     alpha = 0.01, 
@@ -32,7 +33,7 @@ def groupCombinedFC(groupData,
     
     #First step: 
     #compute group significant mean partial correlation
-    gSigParcorr = cfc.groupParcorrSig(groupData, method = methodParcorr, alpha = alpha)
+    gSigParcorr = groupParcorrSig(groupData, method = methodParcorr, alpha = alpha)
     
     #Second step: 
     #compute correlations and Fisher z-transforms for each subject
@@ -47,7 +48,7 @@ def groupCombinedFC(groupData,
         np.fill_diagonal(gCorr[:,:,subj],0)
         #Transform the correlation matrix for each subject with Fisher z-transform  
         #z = (atanh(r)-atanh(r_Ho))*sqrt(N-Z-3) ~ N(0,1)
-        Fz_gCorr[:,:,subj] = cfc.fisherZTrans(gCorr[:,:,subj], 
+        Fz_gCorr[:,:,subj] = fisherZTrans(gCorr[:,:,subj], 
                                           nDatapoints = groupData[subj].shape[0], 
                                           Ho=0, 
                                           condSetSize=0)
@@ -74,8 +75,8 @@ def groupCombinedFC(groupData,
     elif equivalenceTest == True:
         #combinedFC using an equivalence tests for a one-sample t-test (see Lakens, 2017)
         #Transform the minimum correlation of interests, "lower_bound" and "upper_bound" to a Fisher z-statistic
-        l_b = cfc.fisherZTrans(lower_bound, nDatapoints = groupData[subj].shape[0], Ho=0, condSetSize=0)
-        u_b = cfc.fisherZTrans(upper_bound, nDatapoints = groupData[subj].shape[0], Ho=0, condSetSize=0)
+        l_b = fisherZTrans(lower_bound, nDatapoints = groupData[subj].shape[0], Ho=0, condSetSize=0)
+        u_b = fisherZTrans(upper_bound, nDatapoints = groupData[subj].shape[0], Ho=0, condSetSize=0)
         #value that the group mean M is tested against in the one-sample t-test Ho: M = Mu
         Mu = 0 
         #Equivalence test for each edge X-Y

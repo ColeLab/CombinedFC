@@ -6,7 +6,8 @@
 from sklearn import covariance
 from scipy import stats, linalg
 import numpy as np
-import CombinedFCToolBox as cfc
+from .parCorrInvCov import *
+
 
 def parCorrGlasso(dataset, kfolds=10):
     '''
@@ -70,7 +71,7 @@ def parCorrGlasso(dataset, kfolds=10):
                 newD = D[:,Z]
                 #compute the partial correlation for the new dataset but only get Mxy element
                 #x and y will always be in the 0 and 1 positions.
-                pc_xyz = cfc.parCorrInvCov(newD)[0,1]
+                pc_xyz = parCorrInvCov(newD)[0,1]
                 #is a symmetric matrix
                 Mmod[x,y] = Mmod[y,x] = pc_xyz
                 #get the size of the conditioning set for x and y

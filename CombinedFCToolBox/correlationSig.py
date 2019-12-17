@@ -4,7 +4,8 @@
 #a significant r different from zero represents an edges in the connectivity network.
 
 import numpy as np
-import CombinedFCToolBox as cfc
+from .Zcutoff import *
+from .fisherZTrans import *
 
 def correlationSig(dataset, 
                    alpha = 0.01, 
@@ -34,11 +35,11 @@ def correlationSig(dataset,
         
     if equivalenceTest == False: 
         #get the Zalpha cutoff
-        Zalpha = cfc.Zcutoff(alpha = alpha, kind = 'two-sided')    
+        Zalpha = Zcutoff(alpha = alpha, kind = 'two-sided')    
         #make the correlation matrix diagonal equal to zero to avoid problems with Fisher z-transformation
         np.fill_diagonal(Mcorr,0)
         #Fisher z-transformation of the correlation matrix for the null hypothesis of Ho: r = 0
-        Fz = cfc.fisherZTrans(Mcorr, nDatapoints = nDatapoints, Ho = 0)
+        Fz = fisherZTrans(Mcorr, nDatapoints = nDatapoints, Ho = 0)
         #threshold the correlation matrix judging significance if: abs(Fz) >= +Zalpha
         #(this is equivalent to test Fz >= +Zalpha or Fz <= -Zalpha)
         M = np.multiply(Mcorr, abs(Fz) >= Zalpha)+0 #+0 is to avoid -0 in the output
@@ -48,15 +49,15 @@ def correlationSig(dataset,
         #the equivalence test is formed by two one-sided tests
         #Zalpha cutoffs for two one-sided test at a chosen alpha
         #upper bound 
-        Zalpha_u = cfc.Zcutoff(alpha = alpha, kind = 'one-sided-left')
+        Zalpha_u = Zcutoff(alpha = alpha, kind = 'one-sided-left')
         #lower bound
-        Zalpha_l = cfc.Zcutoff(alpha = alpha, kind = 'one-sided-right')
+        Zalpha_l = Zcutoff(alpha = alpha, kind = 'one-sided-right')
         #make the correlation matrix diagonal equal to zero to avoid problems with Fisher z-transformation
         np.fill_diagonal(Mcorr,0)     
         #Fisher z-transform using Ho: r = upper_bound, Ha: r < upper_bound
-        Fz_u = cfc.fisherZTrans(Mcorr, nDatapoints = nDatapoints, Ho = upper_bound)
+        Fz_u = fisherZTrans(Mcorr, nDatapoints = nDatapoints, Ho = upper_bound)
         #and Fisher z-transform using Ho: r = lower_bound, Ha: r > lower_bound
-        Fz_l = cfc.fisherZTrans(Mcorr, nDatapoints = nDatapoints, Ho = lower_bound)
+        Fz_l = fisherZTrans(Mcorr, nDatapoints = nDatapoints, Ho = lower_bound)
         #Fz_u = -Fz_l, expressing it as two variables is just for clarity of exposition.
         
         #threshold the correlation matrix judging significantly equal to zero if:
