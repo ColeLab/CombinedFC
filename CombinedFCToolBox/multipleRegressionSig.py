@@ -34,7 +34,7 @@ def multipleRegressionSig(dataset, alpha = 0.01, sigTest = False):
         reg_x = LinearRegression().fit(D[:,idx], D[:,x])
         
         if sigTest == True:
-            #parameters estimated =  intecept and the beta coefficients
+            #parameters estimated =  intercept and the beta coefficients
             params = np.append(reg_x.intercept_,reg_x.coef_)
             #number of parameters estimated
             nParams = len(params)
