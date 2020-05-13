@@ -3,8 +3,15 @@
 #3) computes correlation, partial correlation, combinedFC, 4) gets precision and recall
 
 import numpy as np
-import CombinedFCToolBox as cfc
 from .graphModel import *
+from .simulateData import *
+from .combinedFC import *
+from .correlationSig import *
+from .simpleRegressionSig import *
+from .partialCorrelationSig import *
+from .multipleRegressionSig import *
+from .precision import *
+from .recall import *
 
 def repetitionsParallel(model,
                         nNodes,
@@ -34,15 +41,15 @@ def repetitionsParallel(model,
 
         #Simulate data using network model C
         if dataType == 'pseudoEmpirical':
-            X, W = cfc.simulateData.pseudoEmpiricalData(C, min_coeff=min_coeff, max_coeff=max_coeff,
+            X, W = simulateData.pseudoEmpiricalData(C, min_coeff=min_coeff, max_coeff=max_coeff,
                                                      nDatapoints=nDatapoints[sample])
         if dataType == 'synthetic':
-            X, W = cfc.simulateData.syntheticData(C, mean_coeff=mean_coeff, std_coeff=std_coeff,
+            X, W = simulateData.syntheticData(C, mean_coeff=mean_coeff, std_coeff=std_coeff,
                                                      nDatapoints=nDatapoints[sample],
                                                       distribution='Gaussian')
 
         #compute combinedFC with the chosen methods
-        Mcfc = cfc.combinedFC(dataset=X, 
+        Mcfc = combinedFC(dataset=X, 
                               methodCondAsso=methodCondAsso,
                               methodParcorr=methodParcorr,
                               alphaCondAsso=alphaSig[cutoff],
@@ -53,19 +60,19 @@ def repetitionsParallel(model,
                               upper_bound = +equiv_bounds[bounds])
         
         if methodAsso == 'correlation':
-            Mc = cfc.correlationSig(dataset=X, alpha=alphaSig[cutoff], equivalenceTest=False)
+            Mc = correlationSig(dataset=X, alpha=alphaSig[cutoff], equivalenceTest=False)
         elif methodAsso == 'simpleRegression':
             Mc = np.zeros((nNodes[node],nNodes[node]))
             for x in range(nNodes[node]-1):
                 for y in range(x+1,nNodes[node]):
-                    Mc[x,y] = cfc.simpleRegressionSig(X[:,x],X[:,y],alpha=alphaSig[cutoff],sigTest=True)
-                    Mc[y,x] = cfc.simpleRegressionSig(X[:,y],X[:,x],alpha=alphaSig[cutoff],sigTest=True)
+                    Mc[x,y] = simpleRegressionSig(X[:,x],X[:,y],alpha=alphaSig[cutoff],sigTest=True)
+                    Mc[y,x] = simpleRegressionSig(X[:,y],X[:,x],alpha=alphaSig[cutoff],sigTest=True)
         
         
         if methodCondAsso == 'partialCorrelation':
-            Mpc = cfc.partialCorrelationSig(dataset=X, alpha=alphaSig[cutoff], method=methodParcorr)
+            Mpc = partialCorrelationSig(dataset=X, alpha=alphaSig[cutoff], method=methodParcorr)
         elif methodCondAsso == 'multipleRegression':
-            Mpc = cfc.multipleRegressionSig(dataset=X, alpha=alphaSig[cutoff], sigTest=True)
+            Mpc = multipleRegressionSig(dataset=X, alpha=alphaSig[cutoff], sigTest=True)
             
             
         #If the inverse covariance approach produces a nan result repeat the simulation
@@ -77,16 +84,16 @@ def repetitionsParallel(model,
     
     #get precision and recall for each of the three methods tested
     PrRe_Mc = np.zeros((1,2))
-    PrRe_Mc[0,0]   = cfc.precision(inferred_model = Mc,true_model = C)
-    PrRe_Mc[0,1]   = cfc.recall(inferred_model = Mc,true_model = C)
+    PrRe_Mc[0,0]   = precision(inferred_model = Mc,true_model = C)
+    PrRe_Mc[0,1]   = recall(inferred_model = Mc,true_model = C)
     
     PrRe_Mpc = np.zeros((1,2))
-    PrRe_Mpc[0,0]  = cfc.precision(inferred_model = Mpc, true_model = C)
-    PrRe_Mpc[0,1]  = cfc.recall(inferred_model = Mpc, true_model = C)
+    PrRe_Mpc[0,0]  = precision(inferred_model = Mpc, true_model = C)
+    PrRe_Mpc[0,1]  = recall(inferred_model = Mpc, true_model = C)
 
     PrRe_Mcfc = np.zeros((1,2))
-    PrRe_Mcfc[0,0] = cfc.precision(inferred_model = Mcfc, true_model = C)
-    PrRe_Mcfc[0,1] = cfc.recall(inferred_model = Mcfc, true_model = C)
+    PrRe_Mcfc[0,0] = precision(inferred_model = Mcfc, true_model = C)
+    PrRe_Mcfc[0,1] = recall(inferred_model = Mcfc, true_model = C)
     
     #number of edges in the true graphical model
     nEdges = np.sum(np.triu(np.maximum(C, C.T),1))
