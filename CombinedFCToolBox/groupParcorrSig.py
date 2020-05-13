@@ -2,8 +2,11 @@
 #determine if the group mean partial correlations are significantly different from zero
 
 import numpy as np
-import CombinedFCToolBox as cfc
 from scipy import stats
+from .parCorrInvCov import *
+from .parCorrRegression import *
+from .fisherZTrans import *
+
 
 def groupParcorrSig(groupData, method = 'inverseCovariance', alpha = 0.01):
     '''
@@ -29,11 +32,11 @@ def groupParcorrSig(groupData, method = 'inverseCovariance', alpha = 0.01):
     for subj in range(nSubjects):
         #compute the partial correlation matrix using the selected method
         if method == 'inverseCovariance':
-            gParcorr[:,:,subj] = cfc.parCorrInvCov(groupData[subj])
+            gParcorr[:,:,subj] = parCorrInvCov(groupData[subj])
         elif method == 'regression':
-            gParcorr[:,:,subj] = cfc.parCorrRegression(groupData[subj])
+            gParcorr[:,:,subj] = parCorrRegression(groupData[subj])
         #Transform the partial correlation matrix for each subject with Fisher's transform 
-        Fz_gParcorr[:,:,subj] = cfc.fisherZTrans(gParcorr[:,:,subj], 
+        Fz_gParcorr[:,:,subj] = fisherZTrans(gParcorr[:,:,subj], 
                                              nDatapoints = groupData[subj].shape[0], 
                                              Ho = 0, 
                                              condSetSize = nNodes-2)
