@@ -3,8 +3,13 @@
 #3) computes correlation, partial correlation, combinedFC, 4) gets precision and recall
 
 import numpy as np
+<<<<<<< HEAD
 from .simulateData import *
 from .graphModel import *
+=======
+from .graphModel import *
+from .simulateData import *
+>>>>>>> 8c6eb892c90833f20852d0a3aa15aca96ccf45b2
 from .combinedFC import *
 from .correlationSig import *
 from .simpleRegressionSig import *
@@ -12,7 +17,10 @@ from .partialCorrelationSig import *
 from .multipleRegressionSig import *
 from .precision import *
 from .recall import *
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8c6eb892c90833f20852d0a3aa15aca96ccf45b2
 
 def repetitionsParallel(model,
                         nNodes,
