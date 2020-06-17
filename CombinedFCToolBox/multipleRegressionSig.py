@@ -54,7 +54,7 @@ def multipleRegressionSig(dataset, alpha = 0.01, sigTest = False):
             Bho = 0 #beta under the null
             ts_params = (params - Bho)/std_params
             #p-value for a t-statistic in a two-sided one sample t-test
-            p_values = [2*(1-stats.t.cdf(np.abs(i),df = nDatapoints-1)) for i in ts_params]
+            p_values = 2*(1-stats.t.cdf(np.abs(ts_params),df = nDatapoints-1))
             
             #remove the intercept p-value
             p_values = np.delete(p_values,0)
