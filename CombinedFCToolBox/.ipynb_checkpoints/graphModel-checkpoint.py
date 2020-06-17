@@ -6,6 +6,7 @@
 import igraph as ig
 import numpy as np
 
+
 def graphModel(model, edgeDensity, nNodes):
     '''
     INPUT:
