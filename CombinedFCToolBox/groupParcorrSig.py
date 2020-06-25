@@ -2,19 +2,13 @@
 #determine if the group mean partial correlations are significantly different from zero
 
 import numpy as np
-<<<<<<< HEAD
-#import CombinedFCToolBox as cfc
 from .parCorrInvCov import *
 from .parCorrRegression import *
 from .fisherZTrans import *
-
-=======
->>>>>>> 8c6eb892c90833f20852d0a3aa15aca96ccf45b2
 from scipy import stats
 from .parCorrInvCov import *
 from .parCorrRegression import *
 from .fisherZTrans import *
-
 
 def groupParcorrSig(groupData, method = 'inverseCovariance', alpha = 0.01):
     '''
