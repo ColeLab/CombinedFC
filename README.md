@@ -1,10 +1,10 @@
 # CombinedFC Toolbox
-## Repository for the combinedFC project (Sanchez-Romero &amp; Cole, 2019)
+## Repository for the combinedFC project (Sanchez-Romero &amp; Cole, 2021)
 _Beta version_
 
 ## Citation
 
-Sanchez-Romero, R., Cole, M.W (2020). "Combining Multiple Functional Connectivity Methods to Improve Causal Inferences". _Journal of Cognitive Neuroscience_.  https://doi.org/10.1162/jocn_a_01580 
+Sanchez-Romero, R., Cole, M.W (2021). "Combining Multiple Functional Connectivity Methods to Improve Causal Inferences". _Journal of Cognitive Neuroscience_.  https://doi.org/10.1162/jocn_a_01580 
 
 Sanchez-Romero, R., Cole, M.W. (Preprint) "Combining multiple functional connectivity methods to improve causal inferences" _bioRxiv_. https://doi.org/10.1101/841890
 
