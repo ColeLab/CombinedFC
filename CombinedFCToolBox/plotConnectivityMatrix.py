@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import numpy as np
 import matplotlib.colors as colors
+import pkg_resources
 
 def plotConnectivityMatrix(ConnMat,
                            methodTitle='correlation',
@@ -43,7 +44,8 @@ def plotConnectivityMatrix(ConnMat,
         #Glasser 360 cortex parcellation ordered into functional networks reported in Ji et al., (2019)
         #make as integer and subtract 1, so the indices start in 0, as Python requires.
         #path where the network file is: it contains labels (first column) and order (second column)
-        netFile = np.loadtxt('CombinedFCToolBox/aux_files/networks_labels.txt',delimiter=',')
+        netFilePath = pkg_resources.resource_filename('CombinedFC.CombinedFCToolBox','aux_files/networks_labels.txt')
+        netFile = np.loadtxt(netFilePath,delimiter=',')
         #to assign each of the 360 nodes to its corresponding network
         netOrder = netFile[:,1].astype(int) - 1 
 
