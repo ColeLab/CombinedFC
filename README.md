@@ -1,5 +1,5 @@
 # CombinedFC Toolbox
-## Repository for the combinedFC project (Sanchez-Romero &amp; Cole, 2019)
+## Repository for the combinedFC project (Sanchez-Romero &amp; Cole, 2021)
 _Beta version_
 
 ## Citation
