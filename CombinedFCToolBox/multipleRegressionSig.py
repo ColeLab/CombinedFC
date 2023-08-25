@@ -27,7 +27,7 @@ def multipleRegressionSig(dataset, alpha = 0.01, sigTest = False):
     M = np.zeros((nNodes,nNodes))
     for x in range(nNodes):
         #create some indices
-        idx = np.ones(nNodes, dtype=np.bool)
+        idx = np.ones(nNodes, dtype=np.bool_)
         #to not include x on the set of regressors, ie. V\{x}
         idx[x] = False 
         #regressed x on the rest of the variables in the set
